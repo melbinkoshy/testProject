@@ -23,8 +23,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { formSchema } from "@/utils/authSchema";
-
-
+import { authClient } from "@/utils/auth-client";
+import { toast } from "@/hooks/use-toast";
 const Signin = () => {
 
     
@@ -37,10 +37,32 @@ const Signin = () => {
         },
       })
     
-      function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+      async function onSubmit(values: z.infer<typeof formSchema>) {
+        const {name, email, password} = values;
+        const {data, error} = await authClient.signUp.email(
+          {
+            email,
+            password,
+            name,
+            callbackURL: "/sign-in",
+          }, {
+            onRequest: () => {
+              toast({
+                title: "Please wait...",
+              })
+            },
+            onSuccess: () => {
+              form.reset()
+            },
+            onError: (ctx) => {
+              toast({ title: ctx.error.message, variant: 'destructive' });
+              form.setError('email', {
+                type: 'manual',
+                message: ctx.error.message
+              })
+            },
+          }
+        );
       }
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -105,3 +127,4 @@ const Signin = () => {
 };
 
 export default Signin;
+
