@@ -22,23 +22,20 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { signInFormSchema } from "@/utils/authSchema";
 
 
 const Signin = () => {
-    const formSchema = z.object({
-      email: z.string().min(2).max(50),
-      password: z.string().min(2).max(50),
-    })
-    
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+
+    const form = useForm<z.infer<typeof signInFormSchema>>({
+        resolver: zodResolver(signInFormSchema),
         defaultValues: {
           email:"",
           password:""
         },
       })
     
-      function onSubmit(values: z.infer<typeof formSchema>) {
+      function onSubmit(values: z.infer<typeof signInFormSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)
