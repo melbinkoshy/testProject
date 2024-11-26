@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,6 +22,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { signInFormSchema } from "@/utils/authSchema";
+import { authClient } from "@/utils/auth-client";
+import { toast } from "@/hooks/use-toast";
 
 
 const Signin = () => {
@@ -35,10 +36,34 @@ const Signin = () => {
         },
       })
     
-      function onSubmit(values: z.infer<typeof signInFormSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+      async function onSubmit(values: z.infer<typeof signInFormSchema>) {
+        const {email, password} = values;
+        const {} = await authClient.signIn.email(
+          {
+            email,
+            password,
+            // callbackURL: "/dashboard",
+          }, {
+            onRequest: () => {
+              toast({
+                title: "Please wait...",
+              })
+            },
+            onSuccess: () => {
+              toast({
+                title: "Successfully Signed up",
+              })
+              form.reset()
+            },
+            onError: (ctx) => {
+              toast({ title: ctx.error.message, variant: 'destructive' });
+              form.setError('email', {
+                type: 'manual',
+                message: ctx.error.message
+              })
+            },
+          }
+        );
       }
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -82,7 +107,7 @@ const Signin = () => {
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
-          Don't have an account yet?{' '}
+          Don&apos;t have an account yet?{' '}
           <Link href='/sign-up' className="W text-black">Sign up</Link>
         </p>
       </CardFooter>

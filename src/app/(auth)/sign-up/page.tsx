@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -39,7 +38,7 @@ const Signin = () => {
     
       async function onSubmit(values: z.infer<typeof formSchema>) {
         const {name, email, password} = values;
-        const {data, error} = await authClient.signUp.email(
+        const {} = await authClient.signUp.email(
           {
             email,
             password,
@@ -52,6 +51,9 @@ const Signin = () => {
               })
             },
             onSuccess: () => {
+              toast({
+                title: "Successfully Signed up",
+              })
               form.reset()
             },
             onError: (ctx) => {
