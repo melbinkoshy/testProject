@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { auth } from '@/utils/auth'
 import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
 import React from 'react'
 
 const Dashboard = async () => {
