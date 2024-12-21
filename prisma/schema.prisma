@@ -73,3 +73,11 @@ model Verification {
 
   @@map("verification")
 }
+
+
+model Item {
+  id          Int      @id @default(autoincrement()) // Auto-incrementing primary key
+  name        String   // Name of the item
+  description String?  // Optional description of the item
+
+}
