@@ -1,6 +1,6 @@
 // pages/api/items.ts
 import {NextApiResponse } from 'next';
-import { NextRequest, NextResponse } from "next/server";
+import {NextResponse } from "next/server";
 
 import prisma from '@/utils/prisma';
 
